@@ -26,7 +26,7 @@ pointColour = (0, 0, 0)
 lineColour = (255,255,255)
 delta_time = 1
 
-zoom = 1.2
+zoom = 1
 
 
 def addFpsCounter():
@@ -65,9 +65,11 @@ def CreatePointSizes(num_points, avarageSize= 8, maxSize = 1):
         PointSizes.append(random.normalvariate(avarageSize,maxSize))
     return PointSizes
 
-def DrawPoints(points, num_points, pointColour,pointSizes):
+def DrawPoints(points, num_points, pointColour,pointSizes,zoom =1):
     for i in range(num_points):
-        pygame.draw.circle(screen, pointColour, (int(points[i][0]), int(points[i][1])), int(pointSizes[i]))
+        pygame.gfxdraw.filled_circle(screen, int(points[i][0]), int(points[i][1]), int(pointSizes[i]),pointColour)
+        pygame.gfxdraw.aacircle(screen, int(points[i][0]), int(points[i][1]), int(pointSizes[i]),pointColour)
+        #pygame.draw.circle(screen, pointColour, (int(points[i][0]), int(points[i][1])), int(pointSizes[i]))
         
 def update_points(points, velocities, dt, screen_width, screen_height, point_radius):
     for i in range(len(points)):
@@ -91,7 +93,7 @@ def update_points(points, velocities, dt, screen_width, screen_height, point_rad
             velocities[i][1] = -abs(velocities[i][1])
 
 
-PointLocations = createPoints(80)
+PointLocations = createPoints(100)
 num_points = len(PointLocations)
 PointVelocities = AddInitialVelocities(num_points)
 pointSizes = CreatePointSizes(num_points)
@@ -125,13 +127,13 @@ while running:
         poly = [PointLocations[simplex[0]],PointLocations[simplex[1]],PointLocations[simplex[1]],PointLocations[simplex[2]],PointLocations[simplex[2]],PointLocations[simplex[0]]]
         avarageY = (PointLocations[simplex[0]][1] + PointLocations[simplex[1]][1] + PointLocations[simplex[2]][1]) / 3
         
-        lineColour = (0,int(255*avarageY/screen_height),0)
+        lineColour = (255-int(255*avarageY/screen_height),int(255*avarageY/screen_height),0)
         pygame.gfxdraw.filled_polygon(screen,poly,lineColour)
 
     # draw points as small circles
     DrawPoints(PointLocations,num_points,pointColour,pointSizes)
     
-    #addPointMarker(PointLocations[simplex[0]])
+    addPointMarker(PointLocations[0])
     addFpsCounter()
 
     # update screen
