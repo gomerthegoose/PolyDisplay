@@ -80,20 +80,20 @@ def update_points(points, velocities, dt, screen_width, screen_height, point_rad
         # Check for collision with screen edges
         if points[i][0] - point_radius < 0:
             points[i][0] = point_radius
-            velocities[i][0] = abs(velocities[i][0])
+            velocities[i][0] *=-1#= abs(velocities[i][0])
         elif points[i][0] + point_radius > screen_width:
             points[i][0] = screen_width - point_radius
-            velocities[i][0] = -abs(velocities[i][0])
+            velocities[i][0] *=-1#= -abs(velocities[i][0])
 
         if points[i][1] - point_radius < 0:
             points[i][1] = point_radius
-            velocities[i][1] = abs(velocities[i][1])
+            velocities[i][1] *=-1#= abs(velocities[i][1])
         elif points[i][1] + point_radius > screen_height:
             points[i][1] = screen_height - point_radius
-            velocities[i][1] = -abs(velocities[i][1])
+            velocities[i][1] *=-1# -abs(velocities[i][1])
 
 
-PointLocations = createPoints(100)
+PointLocations = createPoints(80)
 num_points = len(PointLocations)
 PointVelocities = AddInitialVelocities(num_points)
 pointSizes = CreatePointSizes(num_points)
@@ -108,10 +108,17 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                print("Space bar pressed down!")
+                PointVelocities[0] = [100,10]
+                
+                
     # fill screen with white
     screen.fill(BackGroundColour)
     
+    
+
 
     
     # update point positions
@@ -135,7 +142,6 @@ while running:
     
     addPointMarker(PointLocations[0])
     addFpsCounter()
-
     # update screen
     pygame.display.update()
 
